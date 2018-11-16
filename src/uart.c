@@ -76,7 +76,7 @@ void uart_init(uint32_t baud, uart_handler_t rx_ready, uart_handler_t tx_empty)
         fifo_init(&tx, tx_mem, sizeof(tx_mem));
 
         rx_ready_handler = rx_ready;
-        tx_empty_handler = tx_handler;
+        tx_empty_handler = tx_empty;
     }
 }
 
