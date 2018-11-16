@@ -45,6 +45,7 @@ static uint16_t setting_from_baud(uint32_t baud, bool x2);
 static uint32_t baud_from_setting(uint16_t setting, bool x2);
 static bool use_2x(uint32_t ideal, uint16_t single_setting, uint16_t double_setting);
 static uint32_t delta(uint16_t a, uint16_t b);
+static void dummy_handler(void);
 
 /* functions **********************************************************/
 
@@ -75,8 +76,8 @@ void uart_init(uint32_t baud, uart_handler_t rx_ready, uart_handler_t tx_empty)
         fifo_init(&rx, rx_mem, sizeof(rx_mem));
         fifo_init(&tx, tx_mem, sizeof(tx_mem));
 
-        rx_ready_handler = rx_ready;
-        tx_empty_handler = tx_empty;
+        rx_ready_handler = (rx_ready == NULL) ? dummy_handler : rx_ready;
+        tx_empty_handler = (tx_empty == NULL) ? dummy_handler : tx_empty;
     }
 }
 
@@ -168,4 +169,8 @@ static uint32_t delta(uint16_t a, uint16_t b)
 static bool use_2x(uint32_t ideal, uint16_t single_setting, uint16_t double_setting)
 {
     return delta(ideal, baud_from_setting(double_setting, true)) < delta(ideal, baud_from_setting(single_setting, false));
+}
+
+static void dummy_handler(void)
+{
 }
