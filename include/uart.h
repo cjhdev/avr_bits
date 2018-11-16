@@ -55,7 +55,7 @@ typedef void (*uart_handler_t)(void *user);
  * @param[in] baud
  * 
  * */
-void uart_init(uint32_t baud, void *user, uart_handler_t rx_ready, uart_handler_t tx_empty);
+void uart_init(uint32_t baud, uart_handler_t rx_ready, uart_handler_t tx_empty);
 
 /**
  * Write a byte
