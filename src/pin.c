@@ -193,9 +193,9 @@ static bool translate_pin(enum pin_id id, volatile uint8_t **state, volatile uin
 {
     bool retval = false;
     
-    if(id != NA){
+    if(id != PIN_NA){
         
-        if(id <= D7){            
+        if(id <= PIN_D7){            
             
             *state = &(PIND);
             *port = &(PORTD);
@@ -203,12 +203,12 @@ static bool translate_pin(enum pin_id id, volatile uint8_t **state, volatile uin
             *bit = (uint8_t)id;
             *pcmsk = &(PCMSK2);                        
         }
-        else if(id <= D13){
+        else if(id <= PIN_D13){
             
             *state = &(PINB);
             *port = &(PORTB);
             *ddr = &(DDRB);
-            *bit = ((uint8_t)id) - ((uint8_t)D8);
+            *bit = ((uint8_t)id) - ((uint8_t)PIN_D8);
             *pcmsk = &(PCMSK0);
         }
         else{            
@@ -216,7 +216,7 @@ static bool translate_pin(enum pin_id id, volatile uint8_t **state, volatile uin
             *state = &(PINC);
             *port = &(PORTC);
             *ddr = &(DDRC);
-            *bit = (uint8_t)id - (uint8_t)A0;
+            *bit = (uint8_t)id - (uint8_t)PIN_A0;
             *pcmsk = &(PCMSK1);
         }
         
