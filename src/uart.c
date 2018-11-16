@@ -37,7 +37,6 @@ static volatile uint8_t tx_mem[UART_TX_SIZE];
 static volatile uint8_t rx_mem[UART_TX_SIZE];
 static volatile uart_handler_t rx_ready_handler;
 static volatile uart_handler_t tx_empty_handler;
-static volatile void *user;
 
 /* static function prototypes *****************************************/
 
@@ -49,7 +48,7 @@ static uint32_t delta(uint16_t a, uint16_t b);
 
 /* functions **********************************************************/
 
-void uart_init(uint32_t baud, void *user, uart_handler_t rx_ready, uart_handler_t tx_empty)
+void uart_init(uint32_t baud, uart_handler_t rx_ready, uart_handler_t tx_empty)
 {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE){            
 
@@ -76,7 +75,6 @@ void uart_init(uint32_t baud, void *user, uart_handler_t rx_ready, uart_handler_
         fifo_init(&rx, rx_mem, sizeof(rx_mem));
         fifo_init(&tx, tx_mem, sizeof(tx_mem));
 
-        user = user;
         rx_ready_handler = rx_ready;
         tx_empty_handler = tx_handler;
     }
@@ -123,7 +121,7 @@ bool uart_tx_full(void)
 ISR(USART_RX_vect)
 {    
     (void)fifo_push(&rx, UDR0);
-    rx_ready_handler(user);
+    rx_ready_handler();
 }
 
 ISR(USART_UDRE_vect)
@@ -141,7 +139,7 @@ ISR(USART_UDRE_vect)
     
     if(fifo_empty(&tx)){
         
-        tx_empty_handler(user);
+        tx_empty_handler();
     }    
 }
 
