@@ -31,16 +31,16 @@ void spi_init(enum spi_mode mode, enum spi_order order, uint32_t rate)
     uint8_t clock_div;
     
     /* SCK as output */
-    SCK_DDR |= _BV(SCK);
-    SCK_PORT &= ~_BV(SCK);
+    SCK_DDR |= _BV(SCK_BIT);
+    SCK_PORT &= ~_BV(SCK_BIT);
     
     /* MISO as input with pullup */
-    MISO_DDR &= ~_BV(MISO);
-    MISO_PORT |= _BV(MISO);
+    MISO_DDR &= ~_BV(MISO_BIT);
+    MISO_PORT |= _BV(MISO_BIT);
     
     /* MOSI as output */
-    MOSI_DDR |= _BV(MOSI);
-    MOSI_PORT &= ~_BV(MOSI);
+    MOSI_DDR |= _BV(MOSI_BIT);
+    MOSI_PORT &= ~_BV(MOSI_BIT);
     
     clock_setting = (F_CPU >> (CLKPR & 0xfU)) >> 1U;
     clock_div = 0U;
