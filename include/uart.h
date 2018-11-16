@@ -47,7 +47,7 @@ extern "C" {
 #   define UART_RX_SIZE 10U
 #endif
 
-typedef void (*uart_handler_t)(void *user);
+typedef void (*uart_handler_t)(void);
 
 /**
  * Initialise UART
