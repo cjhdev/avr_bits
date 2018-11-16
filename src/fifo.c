@@ -113,5 +113,5 @@ bool fifo_full(volatile const struct fifo *self)
         retval = (self->size == fifo_max(self));
     }
     
-    return retval
+    return retval;
 }
