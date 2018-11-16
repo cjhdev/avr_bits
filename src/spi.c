@@ -20,6 +20,7 @@
  * */
 
 #include "spi.h"
+#include "pin.h"
 
 #include <avr/io.h>
 #include <avr/power.h>
@@ -30,18 +31,15 @@ void spi_init(enum spi_mode mode, enum spi_order order, uint32_t rate)
     uint32_t clock_setting;
     uint8_t clock_div;
     
-    /* SCK as output */
-    SCK_DDR |= _BV(SCK_BIT);
-    SCK_PORT &= ~_BV(SCK_BIT);
+    /* atmega328: SCK (output) */
+    pin_setPin(PIN_D13, OUTPUT, false);
     
-    /* MISO as input with pullup */
-    MISO_DDR &= ~_BV(MISO_BIT);
-    MISO_PORT |= _BV(MISO_BIT);
+    /* atmega328: MISO (input, pullup) */
+    pin_setPin(PIN_D12, INPUT, true);
     
-    /* MOSI as output */
-    MOSI_DDR |= _BV(MOSI_BIT);
-    MOSI_PORT &= ~_BV(MOSI_BIT);
-    
+    /* atmega328: MOSI (output) */
+    pin_setPin(PIN_D11, OUTPUT, false);
+     
     clock_setting = (F_CPU >> (CLKPR & 0xfU)) >> 1U;
     clock_div = 0U;
             
