@@ -32,13 +32,13 @@ void spi_init(enum spi_mode mode, enum spi_order order, uint32_t rate)
     uint8_t clock_div;
     
     /* atmega328: SCK (output) */
-    pin_setPin(PIN_D13, PIN_OUTPUT, false);
+    pin_set(PIN_D13, PIN_OUTPUT, false);
     
     /* atmega328: MISO (input, pullup) */
-    pin_setPin(PIN_D12, PIN_INPUT, true);
+    pin_set(PIN_D12, PIN_INPUT, true);
     
     /* atmega328: MOSI (output) */
-    pin_setPin(PIN_D11, PIN_OUTPUT, false);
+    pin_set(PIN_D11, PIN_OUTPUT, false);
      
     clock_setting = (F_CPU >> (CLKPR & 0xfU)) >> 1U;
     clock_div = 0U;
