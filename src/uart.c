@@ -81,6 +81,11 @@ void uart_init(uint32_t baud, uart_handler_t rx_ready, uart_handler_t tx_empty)
     }
 }
 
+void uart_sleep(void)
+{
+    UCSR0B = 0U;
+}
+
 bool uart_write(uint8_t c)
 {
     bool retval;

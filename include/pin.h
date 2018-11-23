@@ -83,7 +83,7 @@ struct pin_pcint {
         PIN_CHANGE
     } mode;
     pin_pcint_handler_t handler;
-    struct pin_pcint *next;
+    volatile struct pin_pcint *next;
 };
 
 /**
@@ -144,7 +144,7 @@ void pin_set(enum pin_id id, enum pin_direction dir, bool on);
  * @param[in] handler 
  * 
  * */
-void pin_set_pcint_handler(struct pin_pcint *self, enum pin_id id, enum pin_pcint_mode mode, pin_pcint_handler_t handler);
+void pin_set_pcint_handler(volatile struct pin_pcint *self, enum pin_id id, enum pin_pcint_mode mode, pin_pcint_handler_t handler);
 
 /**
  * Disassociate handler from pin change interrupt

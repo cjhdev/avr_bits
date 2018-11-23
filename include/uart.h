@@ -97,6 +97,13 @@ bool uart_tx_full(void);
  * */
 bool uart_rx_empty(void);
 
+/**
+ * Turn off 
+ * 
+ * 
+ * */
+void uart_sleep(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -27,13 +27,14 @@
 #include <stdint.h>
 #include <stddef.h>
 
-static struct pin_pcint *pcints;
+static volatile struct pin_pcint *pcints;
 
 /* static function prototypes *****************************************/
 
 static bool translate_pin(enum pin_id id, volatile uint8_t **state, volatile uint8_t **port, volatile uint8_t **ddr, volatile uint8_t **pcmsk, uint8_t *bit);
 static void unmask_pcint(enum pin_id id);
 static void mask_pcint(enum pin_id id);
+static void dummy_handler(void);
 
 /* functions **********************************************************/
 
@@ -84,11 +85,11 @@ void pin_set(enum pin_id id, enum pin_direction dir, bool on)
     }
 }
 
-void pin_set_pcint_handler(struct pin_pcint *self, enum pin_id id, enum pin_pcint_mode mode, pin_pcint_handler_t handler)
+void pin_set_pcint_handler(volatile struct pin_pcint *self, enum pin_id id, enum pin_pcint_mode mode, pin_pcint_handler_t handler)
 {    
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE){            
 
-       struct pin_pcint *ptr = pcints;
+       volatile struct pin_pcint *ptr = pcints;
         
         /* enable all the pin change interrupts */
         PCICR |= _BV(PCIE0) |_BV(PCIE1) |_BV(PCIE2);
@@ -111,7 +112,7 @@ void pin_set_pcint_handler(struct pin_pcint *self, enum pin_id id, enum pin_pcin
         
         self->id = id;
         self->state = pin_get(id);
-        self->handler = handler;    
+        self->handler = (handler == NULL) ? dummy_handler : handler;    
         unmask_pcint(id);
     }
 }
@@ -120,7 +121,7 @@ void pin_clear_pcint_handler(const struct pin_pcint *self)
 {    
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE){            
     
-        struct pin_pcint *ptr;
+        volatile struct pin_pcint *ptr;
         
         if(pcints == self){
             
@@ -228,7 +229,7 @@ static bool translate_pin(enum pin_id id, volatile uint8_t **state, volatile uin
 
 ISR(PCINT0_vect)
 {
-    struct pin_pcint *ptr = pcints;
+    volatile struct pin_pcint *ptr = pcints;
     
     while(ptr != NULL){
     
@@ -271,3 +272,7 @@ ISR(PCINT0_vect)
 
 ISR(PCINT1_vect, ISR_ALIASOF(PCINT0_vect));
 ISR(PCINT2_vect, ISR_ALIASOF(PCINT0_vect));
+
+static void dummy_handler(void)
+{
+}
