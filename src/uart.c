@@ -124,6 +124,11 @@ bool uart_tx_full(void)
     return fifo_full(&tx);
 }
 
+bool uart_tx_busy(void)
+{
+    return (UCSR0A & _BV(TXC0)) == 0U);
+}
+
 ISR(USART_RX_vect)
 {    
     (void)fifo_push(&rx, UDR0);

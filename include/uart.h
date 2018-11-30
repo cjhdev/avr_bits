@@ -98,6 +98,17 @@ bool uart_tx_full(void);
 bool uart_rx_empty(void);
 
 /**
+ * Is uart transmitting?
+ * 
+ * @note useful to know if you want to turn off uart without interrupting
+ * a frame
+ * 
+ * @retval true UART is transmitting
+ * 
+ * */
+bool uart_tx_busy(void);
+
+/**
  * Turn off 
  * 
  * 
