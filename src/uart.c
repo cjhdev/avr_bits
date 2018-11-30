@@ -126,7 +126,7 @@ bool uart_tx_full(void)
 
 bool uart_tx_busy(void)
 {
-    return (UCSR0A & _BV(TXC0)) == 0U);
+    return ((UCSR0A & _BV(TXC0)) == 0U);
 }
 
 ISR(USART_RX_vect)
