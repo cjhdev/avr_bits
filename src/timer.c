@@ -102,9 +102,10 @@ uint32_t timer_get_time(void)
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE){
         
         overflow = ((TIFR2 & _BV(TOV2)) > 0);
+        
         timer = TCNT2;
 
-        if(overflow || ((((TIFR2 & _BV(TOV2)) > 0U)) && (timer == 0U))){
+        if(overflow || (((TIFR2 & _BV(TOV2)) > 0U) && (timer < (UINT8_MAX>>1U)))){
             
             retval = time + 1U;            
         }
